@@ -1,15 +1,15 @@
-import urllib2
+import requests
 import os
+import warnings
 
 from lxml import etree
 
 
 def get_html(url):
-    headers = {"Accept": "text/html",
-               "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.22 (KHTML, like Gecko) Chrome/25.0.1364.160 Safari/537.22"}
-    request = urllib2.Request(url, headers=headers)
-    return urllib2.urlopen(request).read()
-
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        r = requests.get(url)
+    return r.text
 
 class basedict():
     def __init__(self):
@@ -87,14 +87,10 @@ class Word():
         self.check_dict()
 
     def downloadMP3(self):
-        url = "http://translate.google.com/translate_tts?tl=en&q={0}".format(self.vocabulary.lower())
-        request = urllib2.Request(url)
-        request.add_header('User-agent', 'Mozilla/5.0')
-        opener = urllib2.build_opener()
-        try:
-            self.MP3 = opener.open(request).read()
-        except:
-            self.MP3 = None
+        url = "http://translate.google.com/translate_tts?tl=en&q={0}&ie=UTF-8&total=1&idx=0&client=t".format(self.vocabulary.lower())
+
+        r = requests.get(url)
+        self.MP3 = r.content
 
     def check_dict(self):
         d = ydict()

@@ -8,5 +8,9 @@ setup(
     license='',
     author='Chung-You Shih',
     author_email='',
-    description=''
+    description='',
+    install_requests=[
+        'lxml',
+        'requests',
+    ],
 )

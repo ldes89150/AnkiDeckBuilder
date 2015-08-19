@@ -1,6 +1,7 @@
 import requests
 import os
 import warnings
+import time
 
 from lxml import etree
 
@@ -103,13 +104,16 @@ class Deck():
     def __init__(self, wordlist):
         self.wordlist = [Word(i) for i in wordlist]
 
-    def auto_build(self):
+    def auto_build(self, sleep_for = None):
         for i in self.wordlist:
             try:
                 i.auto_gen_content()
                 print "Success to build {0}".format(i.vocabulary)
             except:
                 print "Fail to build {0}".format(i.vocabulary)
+            if sleep_for:
+                time.sleep(sleep_for)
+
 
     def to_file(self, path):
         deckpath = os.path.join(path, "deck.txt")
